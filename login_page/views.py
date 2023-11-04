@@ -1,17 +1,34 @@
-from django.shortcuts import render
-from django.contrib.auth import authenticate, login
-# Create your views here.
-from .forms import LoginForm
+# appname/views.py
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import render, redirect
+from .forms import UserRegistrationForm
+from django.contrib.auth.decorators import login_required
 
-def index(request):
+
+
+def register(request):
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["[password"]
-            user = authenticate(request, username=email, password=password)
-            if user is not None:
-                return render(request, "home.html")
+            user = form.save()
+            login(request, user)
+            return redirect('profile')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})
 
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
 
-
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('profile')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form': form})
