@@ -2,6 +2,8 @@
 Login and Sign up using django with django auth
 
 sample images
+
+
 login--->
 ![one](https://github.com/anasmuhd01/DjangoProject/assets/97117799/a68890d5-3d85-4935-a12f-fdf441d49ae5)
 
