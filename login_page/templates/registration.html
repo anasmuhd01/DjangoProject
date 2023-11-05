@@ -9,16 +9,12 @@
      <title>Login Form | CodingLab</title>
 {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
   </head>
   <body>
-
     <div class="container">
       <div class="wrapper">
-        <div class="title"><span>Login Form</span></div>
-          {% if error_message %}
-          <p class="error">{{ error_message }}</p>
-          {% endif %}
+        <div class="title"><span>Sign up Form</span></div>
         <form method="post">
           {% csrf_token %}
           <div class="row">
@@ -27,19 +23,28 @@
             <input type="text" placeholder="Username" id="id_username" name="username" required>
           </div>
           <div class="row">
+            <i class="fa fa-envelope"></i>
+            <label for="id_email"></label>
+            <input type="email" placeholder="email" id="id_email" name="email" required>
+          </div>
+          <div class="row">
             <i class="fas fa-lock"></i>
-            <label for="id_password"></label>
-            <input type="password" placeholder="Password" id="id_password" name="password" required>
+            <label for="id_password1"></label>
+            <input type="password" placeholder="Enter Password" id="id_password1" name="password1" required>
+          </div>
+          <div class="row">
+            <i class="fas fa-lock"></i>
+            <label for="id_password2"></label>
+            <input type="password" placeholder="Confirm Password" id="id_password2" name="password2" required>
           </div>
           <div class="pass"><a href="#">Forgot password?</a></div>
           <div class="row button">
-            <input type="submit" value="Login">
+            <input type="submit" value="Sign up">
           </div>
-          <div class="signup-link">Not a member? <a href="{% url 'register' %}">Signup now</a></div>
+          <div class="signup-link">Already a user <a href="{% url 'login' %}">Login now</a></div>
         </form>
       </div>
     </div>
-
 
   </body>
 </html>

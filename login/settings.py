@@ -43,8 +43,6 @@ INSTALLED_APPS = [
 
 ]
 # settings.py
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'profile'
 
 
 MIDDLEWARE = [

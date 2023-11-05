@@ -1,12 +1,16 @@
-# appname/forms.py
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
-
-class UserRegistrationForm(UserCreationForm):
-    # You can add additional fields here if needed
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=100, help_text='required')
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2']  # Adjust as needed
+        fields = ['username', 'email', 'password1', 'password2']
+
+
+class LoginForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
