@@ -9,5 +9,15 @@
 
     <h2> <a href="{% url 'register' %}">register</a></h2>
     <h2> <a href="{% url 'login' %}">login</a></h2>
+
+ <h1>Image List</h1>
+    <ul>
+        {% for item in image %}
+            <li>
+                <h2>{{ item.title }}</h2>
+                <img src="{{ item.image.url }}" alt="{{ item.title }}">
+            </li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

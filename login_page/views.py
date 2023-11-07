@@ -1,13 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from login_page.forms import RegistrationForm, LoginForm
 from .forms import ItemModelForm
+from .models import ItemModel
 
 def home(request):
-    return render(request, "home.html")
+    image = ItemModel.objects.all()
+    print(image)
+    return render(request, "home.html", {'image':image})
 
 
 def user_reg(request):
@@ -52,7 +54,7 @@ def upload_product(request):
         form = ItemModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect()
+            return redirect('home')
     else:
         form = ItemModelForm()
-        return render(request, 'upload_product.html', {'form':form})
+        return render(request, 'upload_image.html', {'form':form})
