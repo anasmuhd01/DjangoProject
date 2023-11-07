@@ -4,7 +4,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from login_page.forms import RegistrationForm, LoginForm
-
+from .forms import ItemModelForm
 
 def home(request):
     return render(request, "home.html")
@@ -45,3 +45,14 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('home')
+
+
+def upload_product(request):
+    if request.method == 'POST':
+        form = ItemModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect()
+    else:
+        form = ItemModelForm()
+        return render(request, 'upload_product.html', {'form':form})
