@@ -17,6 +17,11 @@
         <div class="title"><span>Sign up Form</span></div>
         <form method="post">
           {% csrf_token %}
+          {% if error_message %}
+    <div class="alert alert-danger">
+        {{ error_message }}
+    </div>
+{% endif %}
           <div class="row">
             <i class="fas fa-user"></i>
             <label for="id_username"></label>
