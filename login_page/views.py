@@ -60,7 +60,6 @@ def user_logout(request):
     return redirect('home')
 
 
-@login_required
 def upload_product(request):
     if request.method == 'POST':
         form = ItemModelForm(request.POST, request.FILES)

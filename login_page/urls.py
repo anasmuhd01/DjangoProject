@@ -6,11 +6,11 @@ from . import views
 
 urlpatterns = [
     path("", views.home, name="home"),
-    path("/register/", views.user_reg, name="register"),
-    path('/profile/', views.profile, name='profile'),
+    path("/register", views.user_reg, name="register"),
+    path('/profile', views.profile, name='profile'),
     path('/login', views.user_login, name='login'),
     path('/logout', views.user_logout, name='logout'),
-    path('upload', views.upload_product, name='upload')
+    path('/upload', views.upload_product, name='upload')
 
 ]
 if settings.DEBUG:
