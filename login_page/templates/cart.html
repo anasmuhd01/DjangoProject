@@ -24,14 +24,27 @@
     </tr>
   </thead>
   <tbody>
+{% if user %}
   {% for item in items_in_cart %}
     <tr>
-      <th scope="row">1</th>
-      <td>{{ item.title }}</td>
-      <td>{{ item.price }}</td>
-      <td>@mdo</td>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ item.item.title }}</td>
+      <td>{{ item.item.price }}</td>
+      <td>{{ item.quantity }}</td>
     </tr>
   {% endfor %}
+{% else %}
+  {% for item in items_in_cart %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ item.title }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.quantity }}</td>
+    </tr>
+  {% endfor %}
+{% endif %}
+
+
 
   </tbody>
 </table>

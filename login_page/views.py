@@ -1,3 +1,5 @@
+from _decimal import Decimal
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -73,24 +75,62 @@ def upload_product(request):
 
 
 
+# views.py
+
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+
 def add_to_cart(request, item_id):
-    item = ItemModel.objects.get(id=item_id)  # Replace YourItemModel with your actual model
+    item = ItemModel.objects.get(id=item_id)
 
-
-    # Check if the item is already in the cart
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
-        cart.items.add(item)
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+    else:
+        cart = request.session.get('cart', {})
+        cart_item = cart.get(str(item_id))  # Convert item_id to string
+        if cart_item:
+            cart_item['quantity'] += 1
+        else:
+            cart_item = {
+                'title': item.title,
+                'price': str(item.price),  # Convert price to string
+                'quantity': 1,
+            }
+
+        cart[str(item_id)] = cart_item  # Convert item_id to string
+        request.session['cart'] = json.loads(json.dumps(cart, cls=DjangoJSONEncoder))
 
     return redirect('home')
 
+
+from decimal import Decimal  # Import the Decimal class
+
 def view_cart(request):
+    total_price = Decimal(0)  # Initialize total_price as a decimal
+
     if request.user.is_authenticated:
         cart, created = Cart.objects.get_or_create(user=request.user)
-        items_in_cart = cart.items.all()
+        items_in_cart = cart.cartitem_set.all()
+        user = request.user
+        # Calculate total_price for authenticated users
+        total_price = sum(item.item.price * item.quantity for item in items_in_cart)
     else:
+        cart = request.session.get('cart', {})
+        item_ids = cart.keys()
         items_in_cart = []
+        for item_id in item_ids:
+            cart_item = cart[item_id]
+            item = {
+                'title': cart_item['title'],
+                'price': Decimal(cart_item['price']),
+                'quantity': cart_item['quantity'],
+            }
+            total_price += item['price'] * item['quantity']
+            items_in_cart.append(item)
+        user = None
 
-    return render(request, 'cart.html', {'items_in_cart': items_in_cart})
-
-
+    return render(request, 'cart.html', {'items_in_cart': items_in_cart, 'user': user, 'total_price': total_price})

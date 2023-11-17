@@ -139,4 +139,5 @@ AUTHENTICATION_BACKENDS = (
 )
 APPEND_SLASH = False
 
+# settings.py
 
