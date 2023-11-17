@@ -42,7 +42,7 @@
                     {% else %}
                   <a class="dropdown-item" href="{% url 'login' %}">Login</a>
                     {% endif %}
-                  <a class="dropdown-item" href="{% url 'upload' %}">upload</a>
+                  <a class="dropdown-item" href="{% url 'view_cart' %}">view_cart</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#">Something else here</a>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="card-body">
                     <h5 class="card-title">{{ item.title }}</h5>
                     <p class="card-text">{{ item.description }}</p>
-                    <a  class="btn btn-primary" onclick="buyNow('{{ item.id }}')">buy now</a></div>
+                    <a href="{% url 'add_to_cart' item.id %}" class="btn btn-primary" >buy now</a></div>
                   </div>
                 </div>
           {% endfor %}
@@ -80,31 +80,7 @@
 
 
 <!-- card for item display -->
-<script>
-function buyNow(itemId) {
-    fetch('/add-to-cart/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: new URLSearchParams({
-            'item_id': itemId
-        }),
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-        // You can add additional logic here if needed
-    })
-    .catch(error => console.error('Error:', error));
-}
-</script>
+
 
 
 

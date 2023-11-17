@@ -138,3 +138,5 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 APPEND_SLASH = False
+
+

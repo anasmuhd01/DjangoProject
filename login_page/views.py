@@ -72,24 +72,22 @@ def upload_product(request):
         return render(request, 'upload_image.html', {'form':form})
 
 
-def add_to_cart(request):
-    if request.method == 'POST':
-        item_id = request.POST.get('item_id')
-        item = get_object_or_404(ItemModel, pk=item_id)
 
-        # Assuming you have a user (you might want to handle this differently)
-        user = request.user
+def add_to_cart(request, item_id):
+    item = ItemModel.objects.get(id=item_id)  # Replace YourItemModel with your actual model
+    cart = request.session.get('cart', [])
 
-        # Check if the user has a cart, create one if not
-        cart, created = Cart.objects.get_or_create(user=user)
+    # Check if the item is already in the cart
+    if item.id not in cart:
+        cart.append(item.id)
+        request.session['cart'] = cart
 
-        # Check if the item is already in the cart, update quantity if yes, create a new item if no
-        cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
-        if not created:
-            cart_item.quantity += 1
-            cart_item.save()
+    return redirect('home')
 
-        return JsonResponse({'message': 'Item added to cart successfully.'})
+def view_cart(request):
+    cart = request.session.get('cart', [])
+    items_in_cart = ItemModel.objects.filter(id__in=cart)  # Replace YourItemModel
 
-    return JsonResponse({'message': 'Invalid request method.'})
+    return render(request, 'cart.html', {'items_in_cart': items_in_cart})
+
 
