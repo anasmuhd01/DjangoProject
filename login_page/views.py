@@ -75,18 +75,21 @@ def upload_product(request):
 
 def add_to_cart(request, item_id):
     item = ItemModel.objects.get(id=item_id)  # Replace YourItemModel with your actual model
-    cart = request.session.get('cart', [])
+
 
     # Check if the item is already in the cart
-    if item.id not in cart:
-        cart.append(item.id)
-        request.session['cart'] = cart
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        cart.items.add(item)
 
     return redirect('home')
 
 def view_cart(request):
-    cart = request.session.get('cart', [])
-    items_in_cart = ItemModel.objects.filter(id__in=cart)  # Replace YourItemModel
+    if request.user.is_authenticated:
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        items_in_cart = cart.items.all()
+    else:
+        items_in_cart = []
 
     return render(request, 'cart.html', {'items_in_cart': items_in_cart})
 

@@ -29,6 +29,11 @@ class ItemModel(models.Model):
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    items = models.ManyToManyField(ItemModel)  # Replace YourItemModel with your actual model
+
+    def __str__(self):
+        return self.user.username + "'s Cart"
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
