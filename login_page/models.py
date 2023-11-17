@@ -7,7 +7,8 @@ PRODUCT_TYPE = (
     ("electronics", "Electronics"),
     ("bikes", "Bikes"),
     ("cars", "Cars"),
-    ("clothing", "Clothing")
+    ("clothing", "Clothing"),
+    ("other", "Other")
 )
 
 
