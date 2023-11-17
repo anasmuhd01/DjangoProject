@@ -1,0 +1,21 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Add your head content here -->
+</head>
+<body>
+    <div class="container mt-3">
+        <h1>Shopping Cart</h1>
+        <ul>
+            {% for item in cart_items %}
+                <li>
+                    <h2>{{ item.item.title }}</h2>
+                    <p>Quantity: {{ item.quantity }}</p>
+                    <p>Price: ${{ item.item.price }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -3,18 +3,19 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from login_page.forms import RegistrationForm, LoginForm
 from .forms import ItemModelForm
-from .models import ItemModel
+from .models import ItemModel, CartItem, Cart
 
 
 def home(request):
     username = request.user.username
-
     image = ItemModel.objects.all()
     context = {'username': username, 'image': image}
-    return render(request, "home.html",context)
+
+    return render(request, "home.html", context)
 
 
 def user_reg(request):
@@ -69,3 +70,26 @@ def upload_product(request):
     else:
         form = ItemModelForm()
         return render(request, 'upload_image.html', {'form':form})
+
+
+def add_to_cart(request):
+    if request.method == 'POST':
+        item_id = request.POST.get('item_id')
+        item = get_object_or_404(ItemModel, pk=item_id)
+
+        # Assuming you have a user (you might want to handle this differently)
+        user = request.user
+
+        # Check if the user has a cart, create one if not
+        cart, created = Cart.objects.get_or_create(user=user)
+
+        # Check if the item is already in the cart, update quantity if yes, create a new item if no
+        cart_item, created = CartItem.objects.get_or_create(cart=cart, item=item)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+
+        return JsonResponse({'message': 'Item added to cart successfully.'})
+
+    return JsonResponse({'message': 'Invalid request method.'})
+
